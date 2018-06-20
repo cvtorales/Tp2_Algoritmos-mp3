@@ -5,7 +5,7 @@
 # include "errors.h"
 
 typedef char * string;
-
+typedef unsigned short ushort;
 typedef enum
 {
 	TRUE,

@@ -4,6 +4,7 @@
 # include "errors.h"
 # include "main.h"
 # include "setup.h"
+# include "mp3.h"
 
 int main (int argc, char * argv [])
 {
@@ -27,10 +28,6 @@ int main (int argc, char * argv [])
 	} 
 	
 	/*TDA_Vector_new () */
-	
-	printf("%lu \n", mp3_files_quantity);
-	printf("%lu \n", track_list_format);
-	printf("%lu \n", track_sort_type);
 
 	for (mp3_file_index = 0; mp3_file_index < mp3_files_quantity; mp3_file_index ++)
 	{
@@ -39,19 +36,18 @@ int main (int argc, char * argv [])
 			print_error_msg (ERROR_INPUT_MP3_FILE);
 			return ERROR_INPUT_MP3_FILE;
 		}
-		/*get_mp3_header () */
-		if (fclose (file_mp3) == EOF)
+		if ((st = get_mp3_header (file_mp3)) != OK)
 		{
-			fclose (file_track_list);
-			print_error_msg (ERROR_DISK_SPACE);
-			return ERROR_DISK_SPACE;
+			print_error_msg (st);
+			return st;	
 		}
-	} 
+		fclose (file_mp3);
+	}
 	/*sort_mp3_list () */
 	/*print_mp3_list () */
 	/*TDA_Vector_destroy () */
+	
 	fclose (file_track_list);
-
 	return OK;		
 }
 
