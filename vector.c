@@ -48,7 +48,7 @@ status_t ADT_Vector_destroy (ADT_Vector_t ** ADT_Vector, status_t (*pf) (void *)
 	return OK;
 }
 
-status_t ADT_Vector_set_next_element (ADT_Vector_t ** ADT_Vector, status_t (*pf) (const void *, void *), void * pvoid)
+status_t ADT_Vector_set_next_element (ADT_Vector_t ** ADT_Vector, status_t (*pf) (const void *, void **), void * pvoid)
 {
 	status_t st;
 	size_t i = (*ADT_Vector) -> alloc_size;
@@ -58,7 +58,7 @@ status_t ADT_Vector_set_next_element (ADT_Vector_t ** ADT_Vector, status_t (*pf)
 	/* if size == alloc size blablabla
 
 	 REALLOC */
-	st = (*pf) (pvoid, (*ADT_Vector) -> elements [i]);
+	st = (*pf) (pvoid, (&(*ADT_Vector) -> elements [i]));
 	if (st != OK)
 		return st;
 

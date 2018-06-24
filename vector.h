@@ -15,6 +15,6 @@ typedef struct
 
 status_t ADT_Vector_new (ADT_Vector_t ** ADT_Vector);
 status_t ADT_Vector_destroy (ADT_Vector_t ** ADT_Vector, status_t (*pf) (void *));
-status_t ADT_Vector_set_next_element (ADT_Vector_t ** ADT_Vector, status_t (*pointer_to_function) (const void *, void *), void * pvoid);
+status_t ADT_Vector_set_next_element (ADT_Vector_t ** ADT_Vector, status_t (*pointer_to_function) (const void *, void **), void * pvoid);
 
 # endif

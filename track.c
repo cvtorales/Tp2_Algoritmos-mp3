@@ -53,21 +53,21 @@ status_t ADT_Track_destroy (void * pvoid)
 }
 
 /*Precondición: pvoid1 no puede ser NULL.*/
-status_t ADT_Track_clone (const void * pvoid1, void * pvoid2)
+status_t ADT_Track_clone (const void * pvoid1, void ** pvoid2)
 {
 	ADT_Track_t * ptrack1;
-	ADT_Track_t * ptrack2;
+	ADT_Track_t ** ptrack2;
 
 	if (pvoid1 == NULL)
 		return ERROR_NULL_POINTER;
 	ptrack1 = (ADT_Track_t *) pvoid1;
-	ptrack2 = (ADT_Track_t *) pvoid2;
-	if ((ptrack2 = (ADT_Track_t *) malloc (sizeof (ADT_Track_t))) == NULL)
+	ptrack2 = (ADT_Track_t **) pvoid2;
+	if ((*ptrack2 = (ADT_Track_t *) malloc (sizeof (ADT_Track_t))) == NULL)
     	return ERROR_NO_MEMORY;
-	strcpy (ptrack2 -> name, ptrack1 -> name);
-	strcpy (ptrack2 -> artist, ptrack1 -> artist);
-	ptrack2 -> year = ptrack1 -> year;
-	ptrack2 -> genre = ptrack1 -> genre;
+	strcpy ( (*ptrack2) -> name, ptrack1 -> name);
+	strcpy ( (*ptrack2) -> artist, ptrack1 -> artist);
+	(*ptrack2) -> year = ptrack1 -> year;
+	(*ptrack2) -> genre = ptrack1 -> genre;
 	return OK;
 }
 

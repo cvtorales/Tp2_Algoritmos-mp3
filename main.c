@@ -21,7 +21,7 @@ int main (int argc, char * argv [])
 	ADT_Track_t ADT_Track;
 	context_t context;
 	status_t (*pointer_to_function) (void *);
-	status_t (*pf) (const void *, void *);
+	status_t (*pf) (const void *, void **);
 	size_t i = 0;
 
 	context . csv_delimiter = CSV_DELIMITER;
@@ -61,16 +61,13 @@ int main (int argc, char * argv [])
 			return st;	
 		}
 
-		ADT_Track_export_as_csv (&ADT_Track, &context, stdout); /*PRUEBA */
-
 		if ((st = ADT_Vector_set_next_element (&ADT_Vector, pf, &ADT_Track)) != OK)
 		{
 			ADT_Vector_destroy (&ADT_Vector, pointer_to_function);
 			print_error_msg (st);
 			return st;	
 		}
-		
-
+		ADT_Track_export_as_csv (ADT_Vector -> elements [i], &context, stdout); /*PRUEBA */
 		fclose (file_mp3);
 	}
 
