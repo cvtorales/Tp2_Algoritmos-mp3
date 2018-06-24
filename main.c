@@ -5,6 +5,8 @@
 # include "main.h"
 # include "setup.h"
 # include "mp3.h"
+# include "vector.h"
+# include "track.h"
 
 int main (int argc, char * argv [])
 {
@@ -15,7 +17,16 @@ int main (int argc, char * argv [])
 	status_t st;
 	size_t mp3_file_index;
 	size_t mp3_files_quantity;
+	ADT_Vector_t * ADT_Vector;
+	ADT_Track_t ADT_Track;
+	context_t context;
+	status_t (*pointer_to_function) (void *);
+	status_t (*pf) (const void *, void *);
+	size_t i = 0;
 
+	context . csv_delimiter = CSV_DELIMITER;
+	pf = ADT_Track_clone;
+	pointer_to_function = ADT_Track_destroy;
 	if ((st = validate_arguments (argc, argv, &track_list_format, &track_sort_type, &mp3_files_quantity )) != OK)
 	{
 		print_error_msg (st);
@@ -26,26 +37,52 @@ int main (int argc, char * argv [])
 		print_error_msg (ERROR_OUTPUT_FILE); /* CAMBIAR*/
 		return ERROR_OUTPUT_FILE;
 	} 
-	
-	/*TDA_Vector_new () */
+
+	if ((st = ADT_Vector_new (&ADT_Vector)) != OK)
+	{
+		print_error_msg (st);
+		fclose (file_track_list);
+		return st;	
+	}
+
 
 	for (mp3_file_index = 0; mp3_file_index < mp3_files_quantity; mp3_file_index ++)
 	{
 		if ((file_mp3 = fopen (argv [mp3_file_index + CMD_ARG_POSITION_FIRST_MP3_FILE], "rb")) == NULL)
 		{
+			ADT_Vector_destroy (&ADT_Vector, pointer_to_function);
 			print_error_msg (ERROR_INPUT_MP3_FILE);
 			return ERROR_INPUT_MP3_FILE;
 		}
-		if ((st = get_mp3_header (file_mp3)) != OK)
+		if ((st = ADT_Track_new_from_file (&ADT_Track, file_mp3)) != OK)
 		{
+			ADT_Vector_destroy (&ADT_Vector, pointer_to_function);
 			print_error_msg (st);
 			return st;	
 		}
+
+		ADT_Track_export_as_csv (&ADT_Track, &context, stdout); /*PRUEBA */
+
+		if ((st = ADT_Vector_set_next_element (&ADT_Vector, pf, &ADT_Track)) != OK)
+		{
+			ADT_Vector_destroy (&ADT_Vector, pointer_to_function);
+			print_error_msg (st);
+			return st;	
+		}
+		
+
 		fclose (file_mp3);
 	}
-	/*sort_mp3_list () */
-	/*print_mp3_list () */
-	/*TDA_Vector_destroy () */
+
+
+	/*ADT_Vector_sort () */
+	/*ADT_Vector_print () */
+	if ((st = ADT_Vector_destroy (&ADT_Vector, pointer_to_function)) != OK)
+	{
+		print_error_msg (st);
+		fclose (file_track_list);
+		return st;	
+	}
 	
 	fclose (file_track_list);
 	return OK;		

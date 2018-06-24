@@ -7,7 +7,7 @@
 # include "track.h"
 # include "setup.h"
 
-status_t TDA_Track_new_from_file (ADT_Track_t ** ADT_Track, FILE * file_mp3)
+status_t ADT_Track_new_from_file (ADT_Track_t * ADT_Track, FILE * file_mp3)
 {
     size_t length;
     char * temp;
@@ -22,95 +22,119 @@ status_t TDA_Track_new_from_file (ADT_Track_t ** ADT_Track, FILE * file_mp3)
     fread(header,sizeof(char), MP3_HEADER_SIZE, file_mp3);
     memcpy(buf,header+LEXEM_START_TITLE,LEXEM_SPAN_TITLE);
     buf[LEXEM_SPAN_TITLE] = '\0';
-    strcpy ((*ADT_Track) -> name, buf);
+    strcpy (ADT_Track -> name, buf);
     memcpy(buf,header+LEXEM_START_ARTIST,LEXEM_SPAN_ARTIST);
     buf[LEXEM_SPAN_ARTIST] = '\0';
-    strcpy ((*ADT_Track) -> artist, buf);
+    strcpy (ADT_Track -> artist, buf);
     memcpy(buf,header+LEXEM_START_YEAR,LEXEM_SPAN_YEAR);
     buf[LEXEM_SPAN_YEAR] = '\0';
-    (*ADT_Track) -> year = strtol (buf, &temp, 10);
+    ADT_Track -> year = strtol (buf, &temp, 10);
     if (*temp)
     	return ERROR_CORRUPTED_FILE;
     memcpy(buf,header+LEXEM_START_GENRE,LEXEM_SPAN_GENRE);
-    (*ADT_Track) -> genre = buf [0];
+    ADT_Track -> genre = buf [0];
     return OK;
 }
 
-status_t TDA_Track_destroy (ADT_Track_t ** ADT_Track)
+status_t ADT_Track_destroy (void * pvoid)
 {
-	if (ADT_Track == NULL)
+	ADT_Track_t * ptrack;
+
+	if (pvoid == NULL)
 		return ERROR_NULL_POINTER;
-	strcpy ((*ADT_Track) -> name, DEFAULT_TRACK_NAME);
-	strcpy ((*ADT_Track) -> artist, DEFAULT_TRACK_ARTIST);
-	(*ADT_Track) -> year = DEFAULT_TRACK_YEAR;
-	(*ADT_Track) -> genre = Other;
-	ADT_Track = NULL;
+	ptrack = (ADT_Track_t *) pvoid;
+	strcpy (ptrack -> name, DEFAULT_TRACK_NAME);
+	strcpy (ptrack -> artist, DEFAULT_TRACK_ARTIST);
+	ptrack -> year = DEFAULT_TRACK_YEAR;
+	ptrack -> genre = Other;
+	free (ptrack);
+	ptrack = NULL;
 	return OK;
 }
 
-/*Precondición: pv1 y pv2 no pueden ser NULL.*/
-int ADT_Track_compare_by_name (const void * pv1, const void * pv2)
+/*Precondición: pvoid1 no puede ser NULL.*/
+status_t ADT_Track_clone (const void * pvoid1, void * pvoid2)
 {
-	ADT_Track_t * p1;
-	ADT_Track_t * p2;
+	ADT_Track_t * ptrack1;
+	ADT_Track_t * ptrack2;
 
-	if (pv1 == NULL || pv2 == NULL)
+	if (pvoid1 == NULL)
 		return ERROR_NULL_POINTER;
-	p1 = (ADT_Track_t *) pv1;
-	p2 = (ADT_Track_t *) pv2;
-	return strcmp (p1 -> name, p2 -> name);
+	ptrack1 = (ADT_Track_t *) pvoid1;
+	ptrack2 = (ADT_Track_t *) pvoid2;
+	if ((ptrack2 = (ADT_Track_t *) malloc (sizeof (ADT_Track_t))) == NULL)
+    	return ERROR_NO_MEMORY;
+	strcpy (ptrack2 -> name, ptrack1 -> name);
+	strcpy (ptrack2 -> artist, ptrack1 -> artist);
+	ptrack2 -> year = ptrack1 -> year;
+	ptrack2 -> genre = ptrack1 -> genre;
+	return OK;
 }
 
-/*Precondición: pv1 y pv2 no pueden ser NULL.*/
-int ADT_Track_compare_by_artist (const void * pv1, const void * pv2)
-{
-	ADT_Track_t * p1;
-	ADT_Track_t * p2;
 
-	if (pv1 == NULL || pv2 == NULL)
+/*Precondición: pvoid1 y pvoid2 no pueden ser NULL.*/
+int ADT_Track_compare_by_name (const void * pvoid1, const void * pvoid2)
+{
+	ADT_Track_t * ptrack1;
+	ADT_Track_t * ptrack2;
+
+	if (pvoid1 == NULL || pvoid2 == NULL)
 		return ERROR_NULL_POINTER;
-	p1 = (ADT_Track_t *) pv1;
-	p2 = (ADT_Track_t *) pv2;
-	return strcmp (p1 -> artist, p2 -> artist);
+	ptrack1 = (ADT_Track_t *) pvoid1;
+	ptrack2 = (ADT_Track_t *) pvoid2;
+	return strcmp (ptrack1 -> name, ptrack2 -> name);
 }
 
-/*Precondición: pv1 y pv2 no pueden ser NULL.*/
-int ADT_Track_compare_by_year (const void * pv1, const void * pv2)
+/*Precondición: pvoid1 y pvoid2 no pueden ser NULL.*/
+int ADT_Track_compare_by_artist (const void * pvoid1, const void * pvoid2)
 {
-	ADT_Track_t * p1;
-	ADT_Track_t * p2;
+	ADT_Track_t * ptrack1;
+	ADT_Track_t * ptrack2;
 
-	if (pv1 == NULL || pv2 == NULL)
+	if (pvoid1 == NULL || pvoid2 == NULL)
 		return ERROR_NULL_POINTER;
-	p1 = (ADT_Track_t *) pv1;
-	p2 = (ADT_Track_t *) pv2;
-	return p1 -> year - p2 -> year;
+	ptrack1 = (ADT_Track_t *) pvoid1;
+	ptrack2 = (ADT_Track_t *) pvoid2;
+	return strcmp (ptrack1 -> artist, ptrack2 -> artist);
 }
 
-/*Precondición: pv1 y pv2 no pueden ser NULL.*/
-int ADT_Track_compare_by_genre (const void * pv1, const void * pv2)
+/*Precondición: pvoid1 y pvpid2 no pueden ser NULL.*/
+int ADT_Track_compare_by_year (const void * pvoid1, const void * pvoid2)
 {
-	ADT_Track_t * p1;
-	ADT_Track_t * p2;
+	ADT_Track_t * ptrack1;
+	ADT_Track_t * ptrack2;
 
-	if (pv1 == NULL || pv2 == NULL)
+	if (pvoid1 == NULL || pvoid2 == NULL)
 		return ERROR_NULL_POINTER;
-	p1 = (ADT_Track_t *) pv1;
-	p2 = (ADT_Track_t *) pv2;
-	return p1 -> genre - p2 -> genre;
+	ptrack1 = (ADT_Track_t *) pvoid1;
+	ptrack2 = (ADT_Track_t *) pvoid2;
+	return ptrack1 -> year - ptrack2 -> year;
 }
 
-status_t ADT_Track_export_as_csv (const void * pv, const void * pcontext, FILE * fo)
+/*Precondición: pvoid1 y pvpid2 no pueden ser NULL.*/
+int ADT_Track_compare_by_genre (const void * pvoid1, const void * pvoid2)
 {
-	ADT_Track_t * p;
+	ADT_Track_t * ptrack1;
+	ADT_Track_t * ptrack2;
+
+	if (pvoid1 == NULL || pvoid2 == NULL)
+		return ERROR_NULL_POINTER;
+	ptrack1 = (ADT_Track_t *) pvoid1;
+	ptrack2 = (ADT_Track_t *) pvoid2;
+	return ptrack1 -> genre - ptrack2 -> genre;
+}
+
+status_t ADT_Track_export_as_csv (const void * pvoid, const void * pcontext, FILE * fo)
+{
+	ADT_Track_t * ptrack;
 	context_t * context;
 
-	if (pv == NULL || pcontext == NULL || fo == NULL)
+	if (pvoid == NULL || pcontext == NULL || fo == NULL)
 		return ERROR_NULL_POINTER;
-	p = (ADT_Track_t *) pv;
+	ptrack = (ADT_Track_t *) pvoid;
 	context = (context_t *) pcontext;
-	fprintf (fo,"%s%c%s%c%hu%c%i\n", p -> name, context -> csv_delimiter, p-> artist,
-	 context -> csv_delimiter, p-> year, context -> csv_delimiter ,p-> genre);
+	fprintf (fo,"%s%c%s%c%hu%c%i\n", ptrack -> name, context -> csv_delimiter, ptrack -> artist,
+	 context -> csv_delimiter, ptrack -> year, context -> csv_delimiter ,ptrack-> genre);
 	return OK;
 }
 

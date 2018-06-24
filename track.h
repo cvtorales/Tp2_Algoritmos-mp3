@@ -17,12 +17,13 @@ typedef struct
 	track_genre_t genre;
 } ADT_Track_t;
 
-status_t TDA_Track_new_from_file (ADT_Track_t ** ADT_Track, FILE * file_mp3);
-status_t TDA_Track_destroy (ADT_Track_t ** ADT_Track);
-int ADT_Track_compare_by_name (const void * pv1, const void * pv2);
-int ADT_Track_compare_by_artist (const void * pv1, const void * pv2);
-int ADT_Track_compare_by_year (const void * pv1, const void * pv2);
-int ADT_Track_compare_by_genre (const void * pv1, const void * pv2);
-status_t ADT_Track_export_as_csv (const void * pv, const void * pcontext, FILE * fo);
+status_t ADT_Track_new_from_file (ADT_Track_t * ADT_Track, FILE * file_mp3);
+status_t ADT_Track_destroy (void * pvoid);
+status_t ADT_Track_clone (const void * pvoid1, void * pvoid2);
+int ADT_Track_compare_by_name (const void * pvoid1, const void * pvoid2);
+int ADT_Track_compare_by_artist (const void * pvoid1, const void * pvoid2);
+int ADT_Track_compare_by_year (const void * pvoid1, const void * pvoid2);
+int ADT_Track_compare_by_genre (const void * pvoid1, const void * pvoid2);
+status_t ADT_Track_export_as_csv (const void * pvoid, const void * pcontext, FILE * fo);
 
 # endif

@@ -2,6 +2,7 @@
 # define MP3__H
 # include <stdio.h>
 # include "errors.h"
+# include "vector.h"
 
 #define MP3_HEADER_SIZE		128
 #define LEXEM_START_TAG     0
@@ -149,6 +150,6 @@ typedef enum
 	Dance_Hall = 125		
 } track_genre_t;
 
-status_t get_mp3_header (FILE * file_mp3);
+status_t get_mp3_header (FILE * file_mp3, ADT_Vector_t ** ADT_Vector);
 
 # endif
