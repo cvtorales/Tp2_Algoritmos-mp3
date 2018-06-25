@@ -48,19 +48,24 @@ status_t ADT_Vector_destroy (ADT_Vector_t ** ADT_Vector, status_t (*pf) (void *)
 	return OK;
 }
 
-status_t ADT_Vector_set_next_element (ADT_Vector_t ** ADT_Vector, status_t (*pf) (const void *, void **), void * pvoid)
+status_t ADT_Vector_set_element (ADT_Vector_t ** ADT_Vector, status_t (*pf) (const void *, void **), void * pvoid, size_t index)
 {
 	status_t st;
-	size_t i = (*ADT_Vector) -> alloc_size;
-
+	void ** aux;
+	
 	if (pf == NULL || ADT_Vector == NULL)
 		return ERROR_NULL_POINTER;
-	/* if size == alloc size blablabla
-
-	 REALLOC */
-	st = (*pf) (pvoid, (&(*ADT_Vector) -> elements [i]));
+	if ((*ADT_Vector) -> alloc_size == (*ADT_Vector) -> size)
+	{
+		if ((aux = (void **) realloc ((*ADT_Vector) -> elements , ((*ADT_Vector) -> alloc_size + CHOP_SIZE) * sizeof ( void *))) == NULL)
+			return ERROR_NO_MEMORY;
+		(*ADT_Vector) -> elements = aux;
+		(*ADT_Vector) -> size += CHOP_SIZE;
+	}
+	if ((*ADT_Vector) -> elements [index] == NULL) /*Si no hay un elemento en la posición index se suma 1 a alloc_size*/
+		(*ADT_Vector) -> alloc_size ++;
+	st = (*pf) (pvoid, (&(*ADT_Vector) -> elements [index]));
 	if (st != OK)
 		return st;
-
 	return OK;
 }

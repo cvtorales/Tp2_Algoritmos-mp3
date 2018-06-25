@@ -2,17 +2,31 @@
 # define SETUP__H
 
 # include <stdio.h>
-
+# include "types.h"
 
 # define CSV_DELIMITER '|'
-# define PROCESSING_INTRUCTION "<? xml version ? '"'1.0'"' ?>"
-# define PROCESSING_INTRUCTION_LENGTH 40
-# define OPEN_INTRUCTION 
+# define XML_PROCESSING_INTRUCTION "<?xml version=\"1.0\" ?>"
+# define XML_MAX_TAG_LENGTH 40
+# define XML_NUMBER_OF_TAG 12
+# define XML_OPEN_TRACKS_TAG "<Tracks>"
+# define XML_CLOSE_TRACKS_TAG "</Tracks>"
+# define XML_OPEN_TRACK_TAG "<Track>"
+# define XML_CLOSE_TRACK_TAG "</Track>"
+# define XML_OPEN_NAME_TAG "<Name>"
+# define XML_CLOSE_NAME_TAG "</Name>"
+# define XML_OPEN_ARTIST_TAG "<Artist>"
+# define XML_CLOSE_ARTIST_TAG "</Artist>"
+# define XML_OPEN_YEAR_TAG "<Year>"
+# define XML_CLOSE_YEAR_TAG "</Year>"
+# define XML_OPEN_GENRE_TAG "<Genre>"
+# define XML_CLOSE_GENRE_TAG "</Genre>"
 
-/*AGREGAR XML*/
-typedef struct 
+typedef struct
 {
 	char csv_delimiter;
+	size_t xml_index;
+	size_t xml_close_mark;
+	char xml_tags [XML_NUMBER_OF_TAG + 1][XML_MAX_TAG_LENGTH + 1];
 } context_t;
 
 typedef enum 

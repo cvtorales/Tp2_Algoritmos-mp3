@@ -17,7 +17,10 @@ typedef struct
 	track_genre_t genre;
 } ADT_Track_t;
 
-status_t ADT_Track_new_from_file (ADT_Track_t * ADT_Track, FILE * file_mp3);
+typedef status_t (* destructor_t) (void *);
+typedef status_t (* clone_t ) (const void *, void ** );
+
+status_t ADT_Track_new_from_file (void * pvoid, FILE * file_mp3);
 status_t ADT_Track_destroy (void * pvoid);
 status_t ADT_Track_clone (const void * pvoid1, void ** pvoid2);
 int ADT_Track_compare_by_name (const void * pvoid1, const void * pvoid2);
@@ -25,5 +28,6 @@ int ADT_Track_compare_by_artist (const void * pvoid1, const void * pvoid2);
 int ADT_Track_compare_by_year (const void * pvoid1, const void * pvoid2);
 int ADT_Track_compare_by_genre (const void * pvoid1, const void * pvoid2);
 status_t ADT_Track_export_as_csv (const void * pvoid, const void * pcontext, FILE * fo);
+status_t ADT_Track_export_as_xml (const void * pvoid, const void * pcontext, FILE * fo);
 
 # endif

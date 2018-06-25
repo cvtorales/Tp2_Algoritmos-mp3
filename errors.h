@@ -22,7 +22,7 @@ typedef enum
 # define MSG_ERROR_NO_MEMORY "Memoria insuficiente en el sistema"
 # define MSG_ERROR_INPUT_MP3_FILE "Archivo .mp3 inválido"
 # define MSG_ERROR_OUTPUT_FILE "Archivo de salida inválido"
-# define MSG_ERROR_DISK_SPACE "Falta de espacio en el disco rígido"
+# define MSG_ERROR_DISK_SPACE "Falta de espacio en disco"
 # define MSG_ERROR_CORRUPTED_FILE "Archivo corrupto"
 # define MSG_ERROR_PROG_INVOCATION "Los argumentos en linea de orden son inválidos"
 

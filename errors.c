@@ -15,7 +15,6 @@ status_t print_error_msg (status_t st)
 		MSG_ERROR_CORRUPTED_FILE,
 		MSG_ERROR_PROG_INVOCATION
 	};
-	
 	fprintf (stderr, "%s\n", errors [st]);
 	return OK;
 }
