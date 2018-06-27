@@ -4,8 +4,9 @@
 # include "types.h"
 # include "vector.h"
 
-
-
+/*Crea un nuevo Vector (tipo de dato abstracto), precarga INIT_CHOP elementos y los incializa a NULL,
+indica la cantidad de elementos almacenados con alloc_size (inicialmente cero)
+y indica la capacidad de almacenamiento de elementos con size */
 status_t ADT_Vector_new ( ADT_Vector_t ** ADT_Vector)
 {
 	size_t i;
@@ -27,6 +28,9 @@ status_t ADT_Vector_new ( ADT_Vector_t ** ADT_Vector)
     return OK;
 }
 
+/*Destruye un nuevo Vector (tipo de dato abstracto), libera la memoria pedida para el Vector y para
+los elementos almacenados en él, requiere un puntero a una función destructora de los elementos
+correspondientes*/
 status_t ADT_Vector_destroy (ADT_Vector_t ** ADT_Vector, status_t (*pf) (void *))
 {
 	status_t st;
@@ -51,6 +55,9 @@ status_t ADT_Vector_destroy (ADT_Vector_t ** ADT_Vector, status_t (*pf) (void *)
 	return OK;
 }
 
+/*Setea en un Vector (tipo de dato abstracto) en la posición indicada por index,
+requiere una función de creación de los elementos correspondientes.
+Si existia previamente un elemento en la posición index, en la cual se queria cargar un elementos, se coincidera un error*/
 status_t ADT_Vector_set_element (ADT_Vector_t ** ADT_Vector, status_t (*pf) (const void *, void **), void * pvoid, size_t index)
 {
 	status_t st;
@@ -65,14 +72,17 @@ status_t ADT_Vector_set_element (ADT_Vector_t ** ADT_Vector, status_t (*pf) (con
 		(*ADT_Vector) -> elements = aux;
 		(*ADT_Vector) -> size += CHOP_SIZE;
 	}
-	if ((*ADT_Vector) -> elements [index] == NULL) /*Si no hay un elemento en la posición index se suma 1 a alloc_size*/
-		(*ADT_Vector) -> alloc_size ++;
+	if ((*ADT_Vector) -> elements [index] != NULL) 
+		return ERROR_OCUPPIED_MEMORY;
+	(*ADT_Vector) -> alloc_size ++;
 	st = (*pf) (pvoid, (&(*ADT_Vector) -> elements [index]));
 	if (st != OK)
 		return st;
 	return OK;
 }
 
+/*Exporta un Vector (tipo de dato abstracto) en el stream fo, requiere un función que imprima elementos en un formato correspondiente, y un
+contexto de impresion.*/
 status_t ADT_Vector_export (const ADT_Vector_t * ADT_Vector, void * context, FILE * fo, status_t (*pf) (const void * pvoid, const void * pcontext, FILE * fo))
 {
 	status_t st;
@@ -88,16 +98,15 @@ status_t ADT_Vector_export (const ADT_Vector_t * ADT_Vector, void * context, FIL
 	return OK;
 }
 
-/* SELECTION SORT*/
-status_t ADT_Vector_sort (ADT_Vector_t ** ADT_Vector, status_t (* pf_clone ) (const void *, void ** ) ,
-	int (* pf_compare) (const void * pvoid1, const void * pvoid2))
+/*Ordena un Vector (tipo de dato abstracto) con el metodo SELECTION SORT, requiere un función que compare 
+(segun un criterio) los elementos del vector.*/
+status_t ADT_Vector_sort (ADT_Vector_t ** ADT_Vector, int (* pf_comparer) (const void * pvoid1, const void * pvoid2))
 {
-	status_t st;
 	size_t i, j;
-	int min = 0;
+	int min;
 	void * clone_element;
 
-	if (pf_clone == NULL || pf_compare == NULL || ADT_Vector == NULL)
+	if ( pf_comparer == NULL || ADT_Vector == NULL)
 		return ERROR_NULL_POINTER;
 
 	for (i = 0; i < (*ADT_Vector) -> alloc_size - 1; i++)
@@ -105,11 +114,12 @@ status_t ADT_Vector_sort (ADT_Vector_t ** ADT_Vector, status_t (* pf_clone ) (co
 		min = i;
 		for (j = i + 1; j < (*ADT_Vector) -> alloc_size ; j ++)
 		{
-			if (((*pf_compare) ( (*ADT_Vector) -> elements [j],  (*ADT_Vector) -> elements [min]) != OK) < 0)
+			if (((* pf_comparer) ( (*ADT_Vector) -> elements [j],  (*ADT_Vector) -> elements [min]))  < 0)
+			{
 				min = j;
+			}
 		}
-		if ((st = (*pf_clone) ( (*ADT_Vector) -> elements [i], &clone_element)) != OK)
-			return st;
+		clone_element = (*ADT_Vector) -> elements [i];
 		(*ADT_Vector) -> elements [i] = (*ADT_Vector) -> elements [min];
 		(*ADT_Vector) -> elements [min] = clone_element;
 	}

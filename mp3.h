@@ -4,21 +4,148 @@
 # include "errors.h"
 # include "vector.h"
 
-#define MP3_HEADER_SIZE		128
-#define LEXEM_START_TAG     0
-#define LEXEM_SPAN_TAG      3
-#define LEXEM_START_TITLE   3
-#define LEXEM_SPAN_TITLE   30
-#define LEXEM_START_ARTIST 33
-#define LEXEM_SPAN_ARTIST  30
-#define LEXEM_START_ALBUM  63
-#define LEXEM_SPAN_ALBUM   30
-#define LEXEM_START_YEAR   93
-#define LEXEM_SPAN_YEAR     4
-#define LEXEM_START_COMMENT 97
-#define LEXEM_SPAN_COMMENT  30
-#define LEXEM_START_GENRE  127
-#define LEXEM_SPAN_GENRE     1
+# define MP3_HEADER_SIZE		128
+# define LEXEM_START_TAG     0
+# define LEXEM_SPAN_TAG      3
+# define LEXEM_START_TITLE   3
+# define LEXEM_SPAN_TITLE   30
+# define LEXEM_START_ARTIST 33
+# define LEXEM_SPAN_ARTIST  30
+# define LEXEM_START_ALBUM  63
+# define LEXEM_SPAN_ALBUM   30
+# define LEXEM_START_YEAR   93
+# define LEXEM_SPAN_YEAR     4
+# define LEXEM_START_COMMENT 97
+# define LEXEM_SPAN_COMMENT  30
+# define LEXEM_START_GENRE  127
+# define LEXEM_SPAN_GENRE     1
+# define NUMBER_OF_GENRES	126
+# define GENRE_BLUES "Blues"
+# define GENRE_CLASSIC_ROCK "Classic Rock"
+# define GENRE_COUNTRY "Country"
+# define GENRE_DANCE "Dance"
+# define GENRE_DISCO "Disco"
+# define GENRE_FUNK "Funk"
+# define GENRE_GRUNGE "Grunge"
+# define GENRE_HIP_HOP "Hip Hop"
+# define GENRE_JAZZ "Jazz"
+# define GENRE_METAL "Metal"
+# define GENRE_NEW_AGE "New Age"
+# define GENRE_OLDIES "oldies"
+# define GENRE_OTHER "OTHER"
+# define GENRE_POP "Pop"
+# define GENRE_R_AND_B "R&B"
+# define GENRE_RAP "Rap"
+# define GENRE_REGGAE "Reggae"
+# define GENRE_ROCK "Rock"
+# define GENRE_TECHNO "Techno"
+# define GENRE_INDUSTRIAL "Industrial"
+# define GENRE_ALTERNATIVE "Alternative"
+# define GENRE_SKA "Ska"
+# define GENRE_DEATH_METAL "Death Metal"
+# define GENRE_PRANKS "Pranks"
+# define GENRE_SOUNDTRACK "Soundtrack"
+# define GENRE_EURO_TECHNO "Euro Techno"
+# define GENRE_AMBIENT "Ambient"
+# define GENRE_TRIP_HOP "Trip Hop"
+# define GENRE_VOCAL "Vocal"
+# define GENRE_JAZZ_PLUS_FUNK "Jazz + Funk"
+# define GENRE_FUSION "Fusion"
+# define GENRE_TRANCE "Trance"
+# define GENRE_CLASSICAL "Classical"
+# define GENRE_INSTRUMENTAL "Instrumental"
+# define GENRE_ACID "Acid"
+# define GENRE_HOUSE "House"
+# define GENRE_GAME "Game"
+# define GENRE_SOUND_CLIP "Sound Clip"
+# define GENRE_GOSPEL "Gospel"
+# define GENRE_NOISE "Noise"
+# define GENRE_ALTERNROCK "AlternRock"
+# define GENRE_BASS "Bass"
+# define GENRE_SOUL "Soul"
+# define GENRE_PUNK "Punk"
+# define GENRE_SPACE "Space"
+# define GENRE_MEDITATIVE "Meditative"
+# define GENRE_INSTRUMENTAL_POP "Instrumental Pop"
+# define GENRE_INSTRUMENTAL_ROCK "Instrumental Rock"
+# define GENRE_ETHNIC "Ethnic"
+# define GENRE_GOTHIC "Gothic"
+# define GENRE_DARKWAVE "Darkwave"
+# define GENRE_TECHNO_INDUSTRIAL "Techno Industrial"
+# define GENRE_ELECTRONIC "Electronic"
+# define GENRE_POP_FOLK "Pop Folk"
+# define GENRE_EURODANCE "Eurodance"
+# define GENRE_DREAM "Dream"
+# define GENRE_SOUTHERN_ROCK "Southern Rock"
+# define GENRE_COMEDY "Comedy"
+# define GENRE_CULT "Cult"
+# define GENRE_GANGSTA "Gangsta"
+# define GENRE_TOP_40 "Top 40"
+# define GENRE_CHRISTIAN_RAP "Christian Rap"
+# define GENRE_POP_FUNK "Pop Funk"
+# define GENRE_JUNGLE "Jungle"
+# define GENRE_NATIVE_AMERICAN "Native American"
+# define GENRE_CABARET "Cabaret"
+# define GENRE_NEW_WAVE "New Wake"
+# define GENRE_PSYCHADELIC "Psychadelic"
+# define GENRE_RAVE "Rave"
+# define GENRE_SHOWTUNES "Showtunes"
+# define GENRE_TRAILER "Trailer"
+# define GENRE_Lo_Fi "Lo-Fi"
+# define GENRE_TRIBAL "Tribal"
+# define GENRE_ACID_PUNK "Acid Punk"
+# define GENRE_ACID_JAZZ "Acid Jazz"
+# define GENRE_POLKA "Polka"
+# define GENRE_RETRO "Retro"
+# define GENRE_MUSICAL "Musical"
+# define GENRE_ROCK_AND_ROLL "Rock&Roll"
+# define GENRE_HARD_ROCK "Hard Rock"
+# define GENRE_FOLK "Folk"
+# define GENRE_FOLK_ROCK "Folk Rock"
+# define GENRE_NATIONAL_FOLK "National Folk"
+# define GENRE_SWING "Swing"
+# define GENRE_FAST_FUSION "Fast Fusion"
+# define GENRE_BEBOB "Bebob"
+# define GENRE_LATIN "Latin"
+# define GENRE_REVIVAL "Revival"
+# define GENRE_CELTIC "Celtic"
+# define GENRE_BLUEGRASS "Bluegrass"
+# define GENRE_AVANTGARDE "Avantgarde"
+# define GENRE_GOTHIC_ROCK "Gothic Rock"
+# define GENRE_PROGRESSIVE_ROCK "Progressive Rock"
+# define GENRE_PSYCHEDELIC_ROCK "Psychedelic Rock"
+# define GENRE_SYMPHONIC_ROCK "Symphonic Rock"
+# define GENRE_SLOW_ROCK "Slow Rock"
+# define GENRE_BIG_BAND "Big Band"
+# define GENRE_CHORUS "Chorus"
+# define GENRE_EASY_LISTENING "Easy Listening"
+# define GENRE_ACOUSTIC "Acoustic"
+# define GENRE_HUMOUR "Humour"
+# define GENRE_SPEECH "Speech"
+# define GENRE_CHANSON "Chanson"
+# define GENRE_OPERA "Opera"
+# define GENRE_CHAMBER_MUSIC "Chamber Music"
+# define GENRE_SONATA "Sonata"
+# define GENRE_SYMPHONY "Symphony"
+# define GENRE_BOOTY_BRASS "Booty Brass"
+# define GENRE_PRIMUS "Primus"
+# define GENRE_PORN_GROOVE "Porn Groove"
+# define GENRE_SATIRE "Satire"
+# define GENRE_SLOW_JAM "Slow Jam"
+# define GENRE_CLUB "Club"
+# define GENRE_TANGO "Tango"
+# define GENRE_SAMBA "Samba"
+# define GENRE_FOLKLORE "Folklore"
+# define GENRE_BALLAD "Ballad"
+# define GENRE_POWEER_BALLLAD "Poweer Ballad"
+# define GENRE_RHYTMIC_SOUL "Rhytmic Soul"
+# define GENRE_FREESTYLE "Freestyle"
+# define GENRE_DUET "Duet"
+# define GENRE_PUNK_ROCK "Punk Rock"
+# define GENRE_DRUM_SOLO "Drum Solo"
+# define GENRE_A_CAPELA "A Capela"
+# define GENRE_EURO_HOUSE "Euro_House"
+# define GENRE_DANCE_HALL "Dance_Hall"	
 
 typedef enum
 {

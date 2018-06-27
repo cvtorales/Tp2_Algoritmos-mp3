@@ -18,7 +18,6 @@ int main (int argc, char * argv [])
 	track_sort_type_t track_sort_type;
 	destructor_t destructor;
 	clone_t clone;
-	
 	ADT_Vector_t * ADT_Vector;
 	ADT_Track_t ADT_Track;
 	size_t mp3_file_index;
@@ -33,7 +32,6 @@ int main (int argc, char * argv [])
 	{
 		ADT_Track_compare_by_name,
 		ADT_Track_compare_by_artist,
-		ADT_Track_compare_by_year,
 		ADT_Track_compare_by_genre,
 	};	
 
@@ -88,12 +86,7 @@ int main (int argc, char * argv [])
 		}
 		fclose (file_mp3);
 	}
-
-
-
-
-
-	if ((st = ADT_Vector_sort (&ADT_Vector, clone ,comparers [track_sort_type])) != OK)
+	if ((st = ADT_Vector_sort (&ADT_Vector, comparers [track_sort_type])) != OK)
 	{
 		ADT_Vector_destroy (&ADT_Vector, destructor);
 		print_error_msg (st);
