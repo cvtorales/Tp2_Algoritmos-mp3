@@ -2,7 +2,6 @@
 # define SETUP__H
 
 # include <stdio.h>
-# include "types.h"
 
 # define CSV_DELIMITER '|'
 # define XML_PROCESSING_INTRUCTION "<?xml version=\"1.0\" ?>"
@@ -41,6 +40,5 @@ typedef enum
 	TRACK_SORT_BY_ARTIST,
 	TRACK_SORT_BY_GENRE
 } track_sort_type_t;
-
 
 # endif

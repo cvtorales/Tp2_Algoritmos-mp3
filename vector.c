@@ -1,7 +1,10 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include "errors.h"
+# include "types.h"
 # include "vector.h"
+
+
 
 status_t ADT_Vector_new ( ADT_Vector_t ** ADT_Vector)
 {
@@ -67,5 +70,48 @@ status_t ADT_Vector_set_element (ADT_Vector_t ** ADT_Vector, status_t (*pf) (con
 	st = (*pf) (pvoid, (&(*ADT_Vector) -> elements [index]));
 	if (st != OK)
 		return st;
+	return OK;
+}
+
+status_t ADT_Vector_export (const ADT_Vector_t * ADT_Vector, void * context, FILE * fo, status_t (*pf) (const void * pvoid, const void * pcontext, FILE * fo))
+{
+	status_t st;
+	size_t i;
+
+	if (pf == NULL || ADT_Vector == NULL || context == NULL)
+		return ERROR_NULL_POINTER;
+	for (i = 0; i < ADT_Vector -> alloc_size; ++i)
+	{
+		if ((st = (*pf) (ADT_Vector -> elements [i], context, fo ) != OK))
+			return st;
+	}
+	return OK;
+}
+
+/* SELECTION SORT*/
+status_t ADT_Vector_sort (ADT_Vector_t ** ADT_Vector, status_t (* pf_clone ) (const void *, void ** ) ,
+	int (* pf_compare) (const void * pvoid1, const void * pvoid2))
+{
+	status_t st;
+	size_t i, j;
+	int min = 0;
+	void * clone_element;
+
+	if (pf_clone == NULL || pf_compare == NULL || ADT_Vector == NULL)
+		return ERROR_NULL_POINTER;
+
+	for (i = 0; i < (*ADT_Vector) -> alloc_size - 1; i++)
+	{
+		min = i;
+		for (j = i + 1; j < (*ADT_Vector) -> alloc_size ; j ++)
+		{
+			if (((*pf_compare) ( (*ADT_Vector) -> elements [j],  (*ADT_Vector) -> elements [min]) != OK) < 0)
+				min = j;
+		}
+		if ((st = (*pf_clone) ( (*ADT_Vector) -> elements [i], &clone_element)) != OK)
+			return st;
+		(*ADT_Vector) -> elements [i] = (*ADT_Vector) -> elements [min];
+		(*ADT_Vector) -> elements [min] = clone_element;
+	}
 	return OK;
 }

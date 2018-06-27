@@ -2,7 +2,6 @@
 # define ERRORS__H
 
 # include <stdio.h>
-# include "types.h"
 
 typedef enum 
 {

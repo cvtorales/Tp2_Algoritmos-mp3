@@ -4,6 +4,7 @@
 # include <stdio.h>
 # include "errors.h"
 # include "setup.h"
+
 # define CMD_ARG_POSITION_FIRST_MP3_FILE 7
 # define CMD_ARG_POSITION_FLAG_FORMAT 1
 # define CMD_ARG_POSITION_FORMAT 2

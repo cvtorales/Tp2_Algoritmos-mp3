@@ -1,13 +1,17 @@
 # ifndef TRACK__H
 # define TRACK__H
 # include <stdio.h>
-# include "mp3.h"
 # include "errors.h"
+# include "mp3.h"
+# include "types.h"
+
 # define MAX_TRACK_NAME_LENGTH 31
 # define MAX_TRACK_ARTIST_LENGTH 31
 # define DEFAULT_TRACK_NAME "Unknown"
 # define DEFAULT_TRACK_ARTIST "Unknown"
 # define DEFAULT_TRACK_YEAR 1900
+# define NUMBER_OF_PRINTERS_FUNCTIONS 2
+# define NUMBER_OF_COMPARATORS_FUNCTIONS 4
 
 typedef struct 
 {
@@ -16,9 +20,6 @@ typedef struct
 	ushort year;
 	track_genre_t genre;
 } ADT_Track_t;
-
-typedef status_t (* destructor_t) (void *);
-typedef status_t (* clone_t ) (const void *, void ** );
 
 status_t ADT_Track_new_from_file (void * pvoid, FILE * file_mp3);
 status_t ADT_Track_destroy (void * pvoid);
