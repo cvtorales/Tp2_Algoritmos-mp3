@@ -4,7 +4,7 @@
 # include <stdio.h>
 
 # define CSV_DELIMITER '|'
-# define XML_PROCESSING_INTRUCTION "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+# define XML_PROCESSING_INTRUCTION "<?xml version=\"1.0\" ?>"
 # define XML_MAX_TAG_LENGTH 40
 # define XML_NUMBER_OF_TAG 12
 # define XML_OPEN_TRACKS_TAG "<Tracks>"
