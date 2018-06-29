@@ -16,6 +16,8 @@ status_t print_error_msg (status_t st)
 		MSG_ERROR_PROG_INVOCATION,
 		MSG_ERROR_OCUPPIED_MEMORY
 	};
+
 	fprintf (stderr, "%s\n", errors [st]);
+	
 	return OK;
 }
