@@ -104,7 +104,8 @@ int main (int argc, char * argv [])
 		}
 
 		fclose (file_mp3);
-	}
+		
+	}  /* Fin del ciclo for */
 
 	if ((st = ADT_Vector_sort (&ADT_Vector, comparers [track_sort_type])) != OK)
 	{
