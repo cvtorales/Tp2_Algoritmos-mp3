@@ -18,7 +18,7 @@ printer_t printers [NUMBER_OF_PRINTERS_FUNCTIONS] =
 	ADT_Track_export_as_xml,
 };
 
-comparer_t comparers [NUMBER_OF_COMPARATORS_FUNCTIONS ] =
+comparator_t comparers [NUMBER_OF_COMPARATORS_FUNCTIONS ] =
 {
 	ADT_Track_compare_by_name,
 	ADT_Track_compare_by_artist,
