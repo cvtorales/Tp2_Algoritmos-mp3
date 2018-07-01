@@ -21,11 +21,16 @@
 # define CMD_ARG_GENRE_SORT "genre"
 # define CMD_ARG_FLAG_OUTPUT_FILE "-out"
 
+typedef struct {
+		track_list_format_t track_list_format;
+		track_sort_type_t track_sort_type;
+		size_t mp3_files_quantity;
+	}config_mp3_t;
+
+
 status_t set_context (context_t * context, const size_t mp3_files_quantity);
 
-status_t validate_arguments (int argc, char * argv [], track_list_format_t * track_list_format, 
-track_sort_type_t * track_sort_type, size_t * mp3_files_quantity );
-
+status_t validate_arguments (int argc, char * argv [], config_mp3_t * config);
 status_t validate_format_argument (char * argv [], track_list_format_t * track_list_format);
 status_t validate_sort_argument (char * argv [], track_sort_type_t * track_sort_type);
 

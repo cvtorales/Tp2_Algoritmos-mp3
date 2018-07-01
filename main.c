@@ -11,45 +11,47 @@
 # include "vector.h"
 # include "track.h"
 
+
+printer_t printers [NUMBER_OF_PRINTERS_FUNCTIONS] =
+{
+	ADT_Track_export_as_csv,
+	ADT_Track_export_as_xml,
+};
+
+comparer_t comparers [NUMBER_OF_COMPARATORS_FUNCTIONS ] =
+{
+	ADT_Track_compare_by_name,
+	ADT_Track_compare_by_artist,
+	ADT_Track_compare_by_genre,
+};	
+
 int main (int argc, char * argv [])
 {
 	status_t st;
 	FILE * file_track_list;
 	FILE * file_mp3;
-	track_list_format_t track_list_format;
+/*	track_list_format_t track_list_format;
 	track_sort_type_t track_sort_type;
-	destructor_t destructor;
+*/	destructor_t destructor;
 	clone_t clone;
 	ADT_Vector_t * ADT_Vector;
 	ADT_Track_t ADT_Track;
 	size_t mp3_file_index;
-	size_t mp3_files_quantity;
+/*	size_t mp3_files_quantity; */
 	context_t context;
-	
-	printer_t printers [NUMBER_OF_PRINTERS_FUNCTIONS] =
-	{
-		ADT_Track_export_as_csv,
-		ADT_Track_export_as_xml,
-	};
-	
-	comparer_t comparers [NUMBER_OF_COMPARATORS_FUNCTIONS ] =
-	{
-		ADT_Track_compare_by_name,
-		ADT_Track_compare_by_artist,
-		ADT_Track_compare_by_genre,
-	};	
+	config_mp3_t config; 
 
 	clone = ADT_Track_clone;
 
 	destructor = ADT_Track_destroy;
 
-	if ((st = validate_arguments (argc, argv, &track_list_format, &track_sort_type, &mp3_files_quantity )) != OK)
+	if ((st = validate_arguments (argc, argv, &config)) != OK)
 	{
 		print_error_msg (st);
 		return st;	
 	}
 
-	if ((st = set_context (&context, mp3_files_quantity)) != OK)
+	if ((st = set_context (&context, config.mp3_files_quantity)) != OK)
 	{
 		print_error_msg (st);
 		return st;	
@@ -68,7 +70,7 @@ int main (int argc, char * argv [])
 		return st;	
 	}
 
-	for (mp3_file_index = 0; mp3_file_index < mp3_files_quantity; mp3_file_index ++)
+	for (mp3_file_index = 0; mp3_file_index < config.mp3_files_quantity; mp3_file_index ++)
 	{
 		if ((file_mp3 = fopen (argv [mp3_file_index + CMD_ARG_POSITION_FIRST_MP3_FILE], "rb")) == NULL)
 		{
@@ -107,7 +109,7 @@ int main (int argc, char * argv [])
 		
 	}  /* Fin del ciclo for */
 
-	if ((st = ADT_Vector_sort (&ADT_Vector, comparers [track_sort_type])) != OK)
+	if ((st = ADT_Vector_sort (&ADT_Vector, comparers [config.track_sort_type])) != OK)
 	{
 		ADT_Vector_destroy (&ADT_Vector, destructor);
 
@@ -118,7 +120,7 @@ int main (int argc, char * argv [])
 		return st;	
 	}
 
-	if ((st = ADT_Vector_export (ADT_Vector, &context, file_track_list, printers [track_list_format])) != OK)
+	if ((st = ADT_Vector_export (ADT_Vector, &context, file_track_list, printers [config.track_list_format])) != OK)
 	{
 		ADT_Vector_destroy (&ADT_Vector, destructor);
 
@@ -143,19 +145,23 @@ int main (int argc, char * argv [])
 	return OK;		
 }
 
-status_t validate_arguments (int argc, char * argv [], track_list_format_t * track_list_format, 
-	track_sort_type_t * track_sort_type, size_t * mp3_files_quantity )
+status_t validate_arguments (int argc, char * argv [], config_mp3_t * config)
 {
 	status_t st;
+	track_list_format_t format; 
+	track_sort_type_t sort;
 
-	if (argv == NULL || track_list_format == NULL || track_sort_type == NULL || mp3_files_quantity == NULL)
+	if (argv == NULL || config == NULL)
 		return ERROR_NULL_POINTER;
 
-	if ((st = validate_format_argument (argv, track_list_format)) != OK)
+	if ((st = validate_format_argument (argv, &format)) != OK)
 		return st;
 
-	if ((st = validate_sort_argument (argv, track_sort_type)) != OK)
+	if ((st = validate_sort_argument (argv, &sort)) != OK)
 		return st;
+
+	config -> track_list_format = format;
+	config -> track_sort_type = sort; 
 
 	if (strcmp (argv [CMD_ARG_POSITION_FLAG_OUTPUT_FILE], CMD_ARG_FLAG_OUTPUT_FILE))
 		return ERROR_PROG_INVOCATION;
@@ -163,7 +169,7 @@ status_t validate_arguments (int argc, char * argv [], track_list_format_t * tra
 	if (argc < CMD_ARG_POSITION_FIRST_MP3_FILE)
 		return ERROR_PROG_INVOCATION;
 
-	*mp3_files_quantity = argc - CMD_ARG_POSITION_FIRST_MP3_FILE;
+	config -> mp3_files_quantity = argc - CMD_ARG_POSITION_FIRST_MP3_FILE;
 
 	return OK;
 }
