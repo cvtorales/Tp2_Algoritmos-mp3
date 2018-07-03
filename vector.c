@@ -108,25 +108,6 @@ status_t ADT_Vector_set_element (ADT_Vector_t ** ADT_Vector, status_t (*pf) (con
 	return OK;
 }
 
-/*Exporta un Vector (tipo de dato abstracto) en el stream fo, requiere un función que imprima elementos en un formato correspondiente, y un
-contexto de impresion.*/
-
-status_t ADT_Vector_export (const ADT_Vector_t * ADT_Vector, void * context, FILE * fo, status_t (*pf) (const void * pvoid, const void * pcontext, FILE * fo))
-{
-	status_t st;
-	size_t i;
-
-	if (pf == NULL || ADT_Vector == NULL || context == NULL)
-		return ERROR_NULL_POINTER;
-
-	for (i = 0; i < ADT_Vector -> alloc_size; ++i)
-	{
-		if ((st = (*pf) (ADT_Vector -> elements [i], context, fo ) != OK))
-			return st;
-	}
-
-	return OK;
-}
 
 /*Ordena un Vector (tipo de dato abstracto) con el metodo SELECTION SORT, requiere un función que compare 
 (segun un criterio) los elementos del vector.*/

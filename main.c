@@ -10,13 +10,7 @@
 # include "mp3.h"
 # include "vector.h"
 # include "track.h"
-
-
-printer_t printers [NUMBER_OF_PRINTERS_FUNCTIONS] =
-{
-	ADT_Track_export_as_csv,
-	ADT_Track_export_as_xml,
-};
+# include "tracks_printer.h"
 
 comparator_t comparers [NUMBER_OF_COMPARATORS_FUNCTIONS ] =
 {
@@ -30,15 +24,11 @@ int main (int argc, char * argv [])
 	status_t st;
 	FILE * file_track_list;
 	FILE * file_mp3;
-/*	track_list_format_t track_list_format;
-	track_sort_type_t track_sort_type;
-*/	destructor_t destructor;
+	destructor_t destructor;
 	clone_t clone;
 	ADT_Vector_t * ADT_Vector;
 	ADT_Track_t ADT_Track;
 	size_t mp3_file_index;
-/*	size_t mp3_files_quantity; */
-	context_t context;
 	config_mp3_t config; 
 
 	clone = ADT_Track_clone;
@@ -46,12 +36,6 @@ int main (int argc, char * argv [])
 	destructor = ADT_Track_destroy;
 
 	if ((st = validate_arguments (argc, argv, &config)) != OK)
-	{
-		print_error_msg (st);
-		return st;	
-	}
-
-	if ((st = set_context (&context, config.mp3_files_quantity)) != OK)
 	{
 		print_error_msg (st);
 		return st;	
@@ -120,7 +104,7 @@ int main (int argc, char * argv [])
 		return st;	
 	}
 
-	if ((st = ADT_Vector_export (ADT_Vector, &context, file_track_list, printers [config.track_list_format])) != OK)
+	if ((st = export_track_vector(ADT_Vector, config.track_list_format, file_track_list)) != OK)
 	{
 		ADT_Vector_destroy (&ADT_Vector, destructor);
 
@@ -131,6 +115,7 @@ int main (int argc, char * argv [])
 		return st;	
 	}
 
+	
 	if ((st = ADT_Vector_destroy (&ADT_Vector, destructor)) != OK)
 	{
 		print_error_msg (st);
@@ -214,41 +199,6 @@ status_t validate_sort_argument (char * argv [], track_sort_type_t * track_sort_
 	if (*track_sort_type != TRACK_SORT_BY_NAME && *track_sort_type != TRACK_SORT_BY_ARTIST
 	 && *track_sort_type != TRACK_SORT_BY_GENRE)
 		return ERROR_PROG_INVOCATION;
-
-	return OK;
-}
-
-
-status_t set_context (context_t * context, const size_t mp3_files_quantity)
-{
-	char xml_context_tags [XML_NUMBER_OF_TAG + 1][XML_MAX_TAG_LENGTH + 1 ] =
-	{
-		XML_PROCESSING_INTRUCTION,
-		XML_OPEN_TRACKS_TAG,
-		XML_OPEN_TRACK_TAG,
-		XML_OPEN_NAME_TAG,
-		XML_CLOSE_NAME_TAG,
-		XML_OPEN_ARTIST_TAG,
-		XML_CLOSE_ARTIST_TAG,
-		XML_OPEN_YEAR_TAG,
-		XML_CLOSE_YEAR_TAG,
-		XML_OPEN_GENRE_TAG,
-		XML_CLOSE_GENRE_TAG,
-		XML_CLOSE_TRACK_TAG,
-		XML_CLOSE_TRACKS_TAG,
-	};
-
-	size_t i;
-
-	context -> csv_delimiter = CSV_DELIMITER;
-	context -> xml_index = 0;
-	context -> xml_close_mark = mp3_files_quantity;
-
-	if (context == NULL)
-		return ERROR_NULL_POINTER;
-
-	for (i = 0; i < XML_NUMBER_OF_TAG + 1; ++i)
-		strcpy (context -> xml_tags [i], xml_context_tags [i]);
 
 	return OK;
 }

@@ -7,7 +7,7 @@
 # include "track.h"
 # include "setup.h"
 
-static string genres [NUMBER_OF_GENRES] =
+string genres [NUMBER_OF_GENRES] =
 {
 	GENRE_BLUES,
 	GENRE_CLASSIC_ROCK,
@@ -279,73 +279,4 @@ int ADT_Track_compare_by_genre (const void * pvoid1, const void * pvoid2)
 
 	return ptrack1 -> genre - ptrack2 -> genre;
 }
-
-
-/*Exporta un ADT_Track (tipo de dato abstracto) con formato csv en un flujo fo, requiere un 
-contexto de impresion.*/
-
-status_t ADT_Track_export_as_csv (const void * pvoid, const void * pcontext, FILE * fo)
-{
-	ADT_Track_t * ptrack;
-	context_t * context;
-
-	if (pvoid == NULL || pcontext == NULL || fo == NULL)
-		return ERROR_NULL_POINTER;
-
-	ptrack = (ADT_Track_t *) pvoid;
-	context = (context_t *) pcontext;
-
-	fprintf (fo,"%s%c%s%c%hu%c%s\n", ptrack -> name, context -> csv_delimiter, ptrack -> artist,
-		context -> csv_delimiter, ptrack -> year, context -> csv_delimiter , genres [ptrack-> genre]);
-
-	return OK;
-}
-
-/*Exporta un ADT_Track (tipo de dato abstracto) con formato xml en un flujo fo, requiere un 
-contexto de impresion.*/
-
-status_t ADT_Track_export_as_xml (const void * pvoid, const void * pcontext, FILE * fo)
-{
-	size_t i;
-	ADT_Track_t * ptrack;
-	context_t * context;
-	if (pvoid == NULL || pcontext == NULL || fo == NULL)
-		return ERROR_NULL_POINTER;
-	
-	ptrack = (ADT_Track_t *) pvoid;
-	context = (context_t *) pcontext;
-	
-	if (context -> xml_index == 0)
-	{
-		for (i = 0; i < 2; ++i)
-			fprintf (fo, "%s\n" ,context -> xml_tags [i]);
-	}
-
-	context -> xml_index ++;
-	i = 2;
-
-	fprintf (fo, "\t%s\n" ,context -> xml_tags [i]);
-	i ++ ;
-
-	fprintf (fo, "\t\t%s %s %s\n" ,context -> xml_tags [i], ptrack -> name,  context -> xml_tags [i + 1]);
-	i += 2;
-
-	fprintf (fo, "\t\t%s %s %s\n" ,context -> xml_tags [i], ptrack -> artist,  context -> xml_tags [i + 1]);
-	i += 2;
-
-	fprintf (fo, "\t\t%s %hu %s\n" ,context -> xml_tags [i], ptrack -> year,  context -> xml_tags [i + 1]);
-	i += 2;
-
-	fprintf (fo, "\t\t%s %s %s\n" ,context -> xml_tags [i], genres [ptrack -> genre] ,  context -> xml_tags [i + 1]);
-	i += 2;
-
-	fprintf (fo, "%s\n" , context -> xml_tags [i]);
-	i ++;
-	
-	if (context -> xml_index == context -> xml_close_mark)
-		fprintf (fo, "%s\n" , context -> xml_tags [i]);
-	
-	return OK;
-}
-
 

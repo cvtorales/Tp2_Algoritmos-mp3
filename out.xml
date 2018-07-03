@@ -1,33 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Tracks>
 	<Track>
-		<Name> Libertango </Name>
-		<Artist> Astor Piazzolla </Artist>
-		<Year> 1974 </Year>
-		<Genre> Tango </Genre>
-</Track>
+		<Name>Libertango</Name>
+		<Artist>Astor Piazzolla</Artist>
+		 <Year> 1974 </Year>
+		<Genre>Tango</Genre>
+	</Track>
 	<Track>
-		<Name> Jamming </Name>
-		<Artist> Bob Marley </Artist>
-		<Year> 1977 </Year>
-		<Genre> Reggae </Genre>
-</Track>
-	<Track>
-		<Name> Thriller </Name>
-		<Artist> Michael Jackson </Artist>
-		<Year> 1982 </Year>
-		<Genre> Pop </Genre>
-</Track>
-	<Track>
-		<Name> Jeremy </Name>
-		<Artist> Pearl Jam </Artist>
-		<Year> 1991 </Year>
-		<Genre> Grunge </Genre>
-</Track>
-	<Track>
-		<Name> Sonne </Name>
-		<Artist> Rammstein </Artist>
-		<Year> 2004 </Year>
-		<Genre> Metal </Genre>
-</Track>
+		<Name>Sonne</Name>
+		<Artist>Rammstein</Artist>
+		 <Year> 2004 </Year>
+		<Genre>Metal</Genre>
+	</Track>
 </Tracks>

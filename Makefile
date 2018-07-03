@@ -4,8 +4,8 @@ LFLAGS=-Wall -ansi -pedantic
 
 all: mp3explorer clean
 
-mp3explorer: main.o vector.o track.o errors.o
-	$(CC) $(LFLAGS) -o mp3explorer  main.o vector.o track.o errors.o
+mp3explorer: main.o vector.o track.o errors.o tracks_printer.o
+	$(CC) $(LFLAGS) -o mp3explorer  main.o vector.o track.o errors.o tracks_printer.o
 
 main.o: main.c main.h setup.h mp3.h errors.h types.h vector.h track.h
 	$(CC) $(CFLAGS) -o main.o main.c 
@@ -15,6 +15,9 @@ vector.o: vector.c errors.h vector.h types.h
 
 track.o: track.c errors.h track.h mp3.h types.h setup.h
 	$(CC) $(CFLAGS) -o track.o track.c
+
+tracks_printer.o: tracks_printer.c errors.h track.h mp3.h types.h setup.h vector.h tracks_printer.h
+	$(CC) $(CFLAGS) -o tracks_printer.o tracks_printer.c
 
 errors.o: errors.c errors.h
 	$(CC) $(CFLAGS) -o errors.o errors.c

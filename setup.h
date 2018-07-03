@@ -20,18 +20,10 @@
 # define XML_OPEN_GENRE_TAG "<Genre>"
 # define XML_CLOSE_GENRE_TAG "</Genre>"
 
-typedef struct
-{
-	char csv_delimiter;
-	size_t xml_index;
-	size_t xml_close_mark;
-	char xml_tags [XML_NUMBER_OF_TAG + 1][XML_MAX_TAG_LENGTH + 1];
-} context_t;
-
 typedef enum 
 {
-	TRACK_LIST_FORMAT_CSV,
-	TRACK_LIST_FORMAT_XML
+	TRACK_LIST_FORMAT_CSV = 0,
+	TRACK_LIST_FORMAT_XML = 1
 } track_list_format_t;
 
 typedef enum
@@ -40,5 +32,11 @@ typedef enum
 	TRACK_SORT_BY_ARTIST,
 	TRACK_SORT_BY_GENRE
 } track_sort_type_t;
+
+typedef struct {
+		track_list_format_t track_list_format;
+		track_sort_type_t track_sort_type;
+		size_t mp3_files_quantity;
+}config_mp3_t;
 
 # endif

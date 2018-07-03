@@ -30,7 +30,5 @@ int ADT_Track_compare_by_name (const void * pvoid1, const void * pvoid2);
 int ADT_Track_compare_by_artist (const void * pvoid1, const void * pvoid2);
 int ADT_Track_compare_by_genre (const void * pvoid1, const void * pvoid2);
 
-status_t ADT_Track_export_as_csv (const void * pvoid, const void * pcontext, FILE * fo);
-status_t ADT_Track_export_as_xml (const void * pvoid, const void * pcontext, FILE * fo);
 
 # endif
