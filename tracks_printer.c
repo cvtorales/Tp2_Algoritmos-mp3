@@ -11,10 +11,22 @@
 extern string genres [NUMBER_OF_GENRES];
 
 
-printer_t printers [NUMBER_OF_PRINTERS_FUNCTIONS] =
+print_header_t print_header[NUMBER_OF_PRINTERS_FUNCTIONS] =
 {
-	print_vector_csv,
-	print_vector_xml
+	print_header_csv,
+	print_header_xml
+};
+
+print_track_t print_track[NUMBER_OF_PRINTERS_FUNCTIONS] =
+{
+	print_track_csv,
+	print_track_xml
+};
+
+print_footer_t print_footer[NUMBER_OF_PRINTERS_FUNCTIONS] =
+{
+	print_footer_csv,
+	print_footer_xml
 };
 
 status_t export_track_vector(const ADT_Vector_t * vector, track_list_format_t format, FILE * fo)
@@ -24,14 +36,13 @@ status_t export_track_vector(const ADT_Vector_t * vector, track_list_format_t fo
 	if (fo == NULL || vector == NULL )
 		return ERROR_NULL_POINTER;
 
-	for(i=0; i < NUMBER_OF_PRINTERS_FUNCTIONS; i++)
-	{
-	    if(i == format )
-	    {
-	        (*(printers[format]))(vector, fo);
-	    }
-	}
+	(*(print_header[format]))(fo);
+	
+	for(i=0; i < vector -> alloc_size; i++)
+		(*(print_track[format]))(vector -> elements[i], fo);
 
+	(*(print_footer[format]))(fo);
+	
 	return OK;
 }
 
@@ -56,7 +67,7 @@ status_t print_footer_xml(FILE * fo)
 	return OK;
 }
 
-status_t print_track_xml(ADT_Track_t * track, FILE * fo)
+status_t print_track_xml(const ADT_Track_t * track, FILE * fo)
 {
 	if(track == NULL || fo == NULL)
 		return ERROR_NULL_POINTER;
@@ -73,38 +84,34 @@ status_t print_track_xml(ADT_Track_t * track, FILE * fo)
 	return OK;
 }
 
-status_t print_vector_xml(const ADT_Vector_t * vector, FILE * fo)
-{
-	size_t i;
-
-	print_header_xml(fo);
-
-	for(i=0; i < vector -> alloc_size; i++)
-		print_track_xml(vector-> elements[i], fo);
-	
-	print_footer_xml(fo);
-
-	return OK;
-}
-
-status_t print_vector_csv(const ADT_Vector_t * vector, FILE * fo)
-{
-	size_t i;
-
-	for(i=0; i < vector -> alloc_size; i++)
-		print_track_csv(vector-> elements[i], fo);
-
-	return OK;
-}
-
-
-status_t print_track_csv(ADT_Track_t * track, FILE * fo)
+status_t print_track_csv(const ADT_Track_t * track, FILE * fo)
 {
 	if(track == NULL || fo == NULL)
 		return ERROR_NULL_POINTER;
 
 	fprintf (fo,"%s%c%s%c%hu%c%s\n", track -> name, CSV_DELIMITER, track -> artist,
 		CSV_DELIMITER, track -> year, CSV_DELIMITER , genres [track-> genre]);
+
+	return OK;
+}
+
+status_t print_header_csv(FILE * fo)
+{
+	if(fo == NULL)
+		return ERROR_NULL_POINTER;
+
+	fprintf (fo,"%s%c%s%c%s%c%s\n", CSV_HEADER_NAME, CSV_DELIMITER, CSV_HEADER_ARTIST,
+		CSV_DELIMITER, CSV_HEADER_YEAR, CSV_DELIMITER , CSV_HEADER_GENRES);
+
+	return OK;
+}
+
+status_t print_footer_csv(FILE * fo)
+{
+	if(fo == NULL)
+		return ERROR_NULL_POINTER;
+
+	fprintf(fo, "%s\n", CSV_CLOSE_TRACKS_TAG );
 
 	return OK;
 }

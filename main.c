@@ -25,13 +25,10 @@ int main (int argc, char * argv [])
 	FILE * file_track_list;
 	FILE * file_mp3;
 	destructor_t destructor;
-	clone_t clone;
 	ADT_Vector_t * ADT_Vector;
-	ADT_Track_t ADT_Track;
+	void * ADT_Track;
 	size_t mp3_file_index;
 	config_mp3_t config; 
-
-	clone = ADT_Track_clone;
 
 	destructor = ADT_Track_destroy;
 
@@ -77,9 +74,10 @@ int main (int argc, char * argv [])
 			return st;	
 		}
 
-		if ((st = ADT_Vector_set_element (&ADT_Vector, clone, &ADT_Track, mp3_file_index)) != OK)
+		if ((st = ADT_Vector_set_element (&ADT_Vector, ADT_Track, mp3_file_index)) != OK)
 		{
 			ADT_Vector_destroy (&ADT_Vector, destructor);
+			ADT_Track_destroy(ADT_Track);
 
 			print_error_msg (st);
 

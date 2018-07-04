@@ -22,7 +22,7 @@ typedef struct
 	track_genre_t genre;
 } ADT_Track_t;
 
-status_t ADT_Track_new_from_file (void * pvoid, FILE * file_mp3);
+status_t ADT_Track_new_from_file (void ** pvoid, FILE * file_mp3);
 status_t ADT_Track_destroy (void * pvoid);
 status_t ADT_Track_clone (const void * pvoid1, void ** pvoid2);
 

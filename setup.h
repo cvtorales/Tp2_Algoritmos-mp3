@@ -20,6 +20,12 @@
 # define XML_OPEN_GENRE_TAG "<Genre>"
 # define XML_CLOSE_GENRE_TAG "</Genre>"
 
+# define CSV_HEADER_NAME "Name"
+# define CSV_HEADER_ARTIST "Artist"
+# define CSV_HEADER_YEAR "Year"
+# define CSV_HEADER_GENRES "Genres"
+# define CSV_CLOSE_TRACKS_TAG "End CSV file."
+
 typedef enum 
 {
 	TRACK_LIST_FORMAT_CSV = 0,

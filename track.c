@@ -141,18 +141,21 @@ string genres [NUMBER_OF_GENRES] =
 /*Crea un ADT_Track (tipo de dato abstracto), atraves de un archivo .mp3
  y lo almacena en una variable estatica.*/
 
-status_t ADT_Track_new_from_file (void * pvoid, FILE * file_mp3)
+status_t ADT_Track_new_from_file (void ** pvoid, FILE * file_mp3)
 {
     size_t length;
     char * temp;
     char header[MP3_HEADER_SIZE];
     char buf[MP3_HEADER_SIZE];
-    ADT_Track_t * ptrack;
+    ADT_Track_t ** ptrack;
 
     if (file_mp3 == NULL || pvoid == NULL)
        return ERROR_NULL_POINTER;
 
-  	ptrack = (ADT_Track_t *) pvoid;	
+  	ptrack = (ADT_Track_t **) pvoid;
+
+  	if (( *ptrack = (ADT_Track_t *) malloc (sizeof (ADT_Track_t))) == NULL)
+    	return ERROR_NO_MEMORY;	
     
     fseek(file_mp3, 0, SEEK_END);                       	/*manda el puntero al final del archivo*/
     length = ftell(file_mp3);                               /*da la distancia al comienzo*/
@@ -162,21 +165,21 @@ status_t ADT_Track_new_from_file (void * pvoid, FILE * file_mp3)
 
     memcpy(buf, header + LEXEM_START_TITLE, LEXEM_SPAN_TITLE);
     buf[LEXEM_SPAN_TITLE] = '\0';
-    strcpy (ptrack -> name, buf);
+    strcpy ((*ptrack) -> name, buf);
 
     memcpy(buf,header + LEXEM_START_ARTIST, LEXEM_SPAN_ARTIST);
     buf[LEXEM_SPAN_ARTIST] = '\0';
-    strcpy (ptrack -> artist, buf);
+    strcpy ((*ptrack) -> artist, buf);
 
     memcpy(buf, header + LEXEM_START_YEAR, LEXEM_SPAN_YEAR);
     buf[LEXEM_SPAN_YEAR] = '\0';
-    ptrack -> year = strtol (buf, &temp, 10);
+    (*ptrack) -> year = strtol (buf, &temp, 10);
 
     if (*temp)
     	return ERROR_CORRUPTED_FILE;
 
     memcpy(buf, header + LEXEM_START_GENRE, LEXEM_SPAN_GENRE);
-    ptrack -> genre = buf [0];
+    (*ptrack) -> genre = buf [0];
 
     return OK;
 }
@@ -204,33 +207,6 @@ status_t ADT_Track_destroy (void * pvoid)
 
 	return OK;
 }
-
-/*Clona un ADT_Track (tipo de dato abstracto), pide memoria y copia los campos de otro
-ADT_Track (este puede ser estatico o no).*/
-
-status_t ADT_Track_clone (const void * pvoid1, void ** pvoid2)
-{
-	ADT_Track_t * ptrack1;
-	ADT_Track_t ** ptrack2;
-
-	if (pvoid1 == NULL)                      /*pvoid2 puede ser NULL.*/
-		return ERROR_NULL_POINTER;
-
-	ptrack1 = (ADT_Track_t *) pvoid1;
-	ptrack2 = (ADT_Track_t **) pvoid2;
-
-	if ((*ptrack2 = (ADT_Track_t *) malloc (sizeof (ADT_Track_t))) == NULL)
-    	return ERROR_NO_MEMORY;
-
-	strcpy ( (*ptrack2) -> name, ptrack1 -> name);
-	strcpy ( (*ptrack2) -> artist, ptrack1 -> artist);
-
-	(*ptrack2) -> year = ptrack1 -> year;
-	(*ptrack2) -> genre = ptrack1 -> genre;
-
-	return OK;
-}
-
 
 /*Compara 2 ADT_Track (tipo de dato abstracto) por campo nombre*/
 

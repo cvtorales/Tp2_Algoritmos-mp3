@@ -278,7 +278,6 @@ typedef enum
 		
 } track_genre_t;
 
-status_t get_mp3_header (FILE * file_mp3, ADT_Vector_t ** ADT_Vector);
 
 # endif
 

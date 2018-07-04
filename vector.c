@@ -74,13 +74,13 @@ status_t ADT_Vector_destroy (ADT_Vector_t ** ADT_Vector, status_t (*pf) (void *)
 requiere una función de creación de los elementos correspondientes.
 Si existia previamente un elemento en la posición index, en la cual se queria cargar un elementos, se coincidera un error*/
 
-status_t ADT_Vector_set_element (ADT_Vector_t ** ADT_Vector, status_t (*pf) (const void *, void **), void * pvoid, size_t index)
+status_t ADT_Vector_set_element (ADT_Vector_t ** ADT_Vector, void * pvoid, size_t index)
 {
-	status_t st;
+/*	status_t st;  */
 	void ** aux;
 	size_t i;
 
-	if (pf == NULL || ADT_Vector == NULL)
+	if ( ADT_Vector == NULL)
 		return ERROR_NULL_POINTER;
 
 	if ((*ADT_Vector) -> alloc_size == (*ADT_Vector) -> size)
@@ -98,10 +98,13 @@ status_t ADT_Vector_set_element (ADT_Vector_t ** ADT_Vector, status_t (*pf) (con
 
 	if ((*ADT_Vector) -> elements [index] != NULL) 
 		return ERROR_OCUPPIED_MEMORY;
-
+/*
 	st = (*pf) (pvoid, (&(*ADT_Vector) -> elements [index]));
 	if (st != OK)
 		return st;
+*/
+
+	((* ADT_Vector) -> elements [index])= pvoid; 
 
 	(*ADT_Vector) -> alloc_size ++;
 
